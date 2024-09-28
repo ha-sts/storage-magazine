@@ -1,0 +1,134 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "HA-STS Storage Magazine API",
+    "version": "0.0.1",
+    "license": {"name": "BSD 2-Clause License"}
+  },
+  "paths": {
+    "/": {
+      "get": {
+        "summary": "Root page that shows the sitemap of the service.",
+        "responses": {
+          "200": {
+            "description": "OK: Body contains the sitemap of the service.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/files/": {
+      "post": {
+        "responses": {
+          "201": {
+            "description": ""
+          },
+          "400": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/files/{file-hash}": {
+      "parameters": [
+        {
+          "$ref": "#/components/parameters/file-hash"
+        }
+      ],
+      "get": {
+        "responses": {
+          "200": {
+            "description": "Returns the binary data of the requested file.",
+            "content": {
+              "application/octet-stream": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      },
+      "delete": {
+        "responses": {
+          "204": {
+            "$ref": "#/components/responses/204"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "parameters": {
+      "file-hash": {
+        "name": "file-hash",
+        "in": "path",
+        "description": "Hash of the file that is to be returned.",
+        "required": true,
+        "examples": {
+          "one": {
+            "summary": "Bare hash, which is assumed to be using the configured storage (default) hash",
+            "value": "47dfae9288abf3d5d2252abfb0bd6ac9662637d646e6df9d5d274bc336e27abc"
+          },
+          "two": {
+            "summary": "Specified hash, specified before the underscore character.",
+            "value": "sha256_47dfae9288abf3d5d2252abfb0bd6ac9662637d646e6df9d5d274bc336e27abc"
+          },
+          "three": {
+            "summary": "Specified hash, specified before the underscore character.",
+            "value": "sha512_119a7a63f6bda3c96eeff52cf0376b2a0199753aa2da144bf313aeeded199f708d8a108948aa06c3ff94e468e842de1e0c0f3498b994be1bb1711e2efb65a647"
+          }
+        },
+        "schema":{
+          "type": "string"
+        }
+      }
+    },
+    "schemas": {
+      "error": {
+        "type": "object",
+        "properties": {
+          "status-code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "responses": {
+      "204": {
+        "description": "204 No Content: Successful but not returning any data."
+      },
+      "404": {
+        "description": "404 Not Found: The requested resource does not exist.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/error"
+            }
+          },
+          "text/plain": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}
