@@ -6,13 +6,14 @@ from flask import Blueprint, render_template_string
 ### GLOBALS ###
 root_blueprint = Blueprint('root', __name__)
 
+# FIXME: Should make the node id available here.
 HTML_PAGE = """<!DOCTYPE html>
 <html>
 <head>
-  <title>HA-STS Server</title>
+  <title>HA-STS Storage Magazine {node_id}</title>
 </head>
 <body style="min-height: 100%;">
-  <h1>Basic HA-STS Server Core</h1>
+  <h1>HA-STS Storage Magazine {node_id}</h1>
   <p>Here's the URLs for the parts of the site:</p>
   <ul>
   {% for item in links %}
