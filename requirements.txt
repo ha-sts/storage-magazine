@@ -3,3 +3,4 @@ radon
 coverage
 
 Flask
+pyfakefs

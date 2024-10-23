@@ -23,11 +23,11 @@
         }
       }
     },
-    "/files/": {
+    "/binaries/": {
       "post": {
         "responses": {
           "201": {
-            "description": ""
+            "$ref": "#/components/responses/201"
           },
           "400": {
             "description": ""
@@ -35,16 +35,16 @@
         }
       }
     },
-    "/files/{file-hash}": {
+    "/binaries/{binary-hash}": {
       "parameters": [
         {
-          "$ref": "#/components/parameters/file-hash"
+          "$ref": "#/components/parameters/binary-hash"
         }
       ],
       "get": {
         "responses": {
           "200": {
-            "description": "Returns the binary data of the requested file.",
+            "description": "Returns the data of the requested binary.",
             "content": {
               "application/octet-stream": {
                 "schema": {
@@ -69,14 +69,65 @@
           }
         }
       }
+    },
+    "/statistics/binaries": {
+      "get": {
+        "summary": "JSON object of statistics about the stored binaries.",
+        "responses": {
+          "200": {
+            "description": "OK: Body contains the JSON object.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/statistics-binaries"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/statistics/storage": {
+      "get": {
+        "summary": "JSON object of statistics about the storage medium.",
+        "responses": {
+          "200": {
+            "description": "OK: Body contains the JSON object.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/statistics-storage"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/supported/hashes": {
+      "get": {
+        "summary": "JSON list of the hash types supported.",
+        "responses": {
+          "200": {
+            "description": "OK: Body contains the JSON list of hashes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/supported-hashes"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "parameters": {
-      "file-hash": {
-        "name": "file-hash",
+      "binary-hash": {
+        "name": "binary-hash",
         "in": "path",
-        "description": "Hash of the file that is to be returned.",
+        "description": "Hash of the binary to work with.",
         "required": true,
         "examples": {
           "one": {
@@ -98,6 +149,31 @@
       }
     },
     "schemas": {
+      "created": {
+        "type": "object",
+        "properties": {
+          "storage-hash-type": {
+            "type": "string"
+          },
+          "storage-hash-value": {
+            "type": "string"
+          },
+          "hashes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
       "error": {
         "type": "object",
         "properties": {
@@ -108,9 +184,36 @@
             "type": "string"
           }
         }
+      },
+      "statistics-binaries": {
+        "type": "object"
+      },
+      "statistics-storage": {
+        "type": "object"
+      },
+      "supported-hashes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
       }
     },
     "responses": {
+      "201": {
+        "description": "201 Created: The resource has been created.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/created"
+            }
+          },
+          "text/plain": {
+            "schema": {
+              "type": "string"
+            }
+          }
+        }
+      },
       "204": {
         "description": "204 No Content: Successful but not returning any data."
       },
